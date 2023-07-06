@@ -17,6 +17,7 @@ home="$(eval echo ~$user)"
 
 readonly RP_DIR="$home/RetroPie"
 readonly RP_PORTS_DIR="/opt/retropie/ports"
+readonly RP_CONFIGS_PORTS_DIR="/opt/retropie/configs/ports"
 
 readonly SCRIPT_VERSION="1.0.0"
 readonly SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
@@ -91,8 +92,14 @@ function get_options() {
 #H                              Default: "~/RetroPie-Setup".
             -i|--install)
                 check_retropie_setup_dir_path "$2"
+
                 cat "$SCRIPT_DIR/$SCRIPTMODULE_PATH_FILE" > "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
+                chown -R "$user:$user" "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
+
                 "$RP_SETUP_DIR/retropie_packages.sh" "$SCRIPTMODULE_NAME"
+
+                cp "$SCRIPT_DIR/launching.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
+                chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
 
                 if [[ "$?" -eq 0 ]]; then
                     echo
