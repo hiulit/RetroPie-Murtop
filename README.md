@@ -6,13 +6,11 @@ A script to install Murtop on Retropie.
 
 ℹ️ **Murtop will be installed in the `ports` section.**
 
-![Retropie-Murtop-Banner](banner.jpg)
-
 ### ⚠️ Prerequisites
 
 You have to own a copy of Murtop, which you can buy it on [itch.io](https://hiulit.itch.io/murtop).
 
-<iframe frameborder="0" src="https://itch.io/embed/521768" width="552" height="167"><a href="https://hiulit.itch.io/murtop">Murtop by hiulit</a></iframe>
+[![Purchase Murtop on itch.io](images/itchio_widget.jpg)](https://hiulit.itch.io/murtop/purchase)
 
 When you download Murtop from [itch.io](https://hiulit.itch.io/murtop), you get a zip file (`murtop_[ARCH].zip`). You'll have to place it at `~/RetroPie-Murtop/bin` after the [script installation](#install-the-script).
 
