@@ -15,7 +15,9 @@ rp_module_license="MIT https://github.com/hiulit/RetroPie-Murtop/blob/main/LICEN
 rp_module_section="opt"
 rp_module_flags="x86 x86_64 arm aarch64"
 
-readonly GAME_BIN_DIR="/home/$user/RetroPie-Murtop/bin"
+home="$(eval echo ~$user)"
+
+readonly GAME_BIN_DIR="$home/RetroPie-Murtop/bin"
 
 
 function install_bin_murtop() {
