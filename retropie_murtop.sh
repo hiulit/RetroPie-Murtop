@@ -67,17 +67,6 @@ function usage() {
 }
 
 
-function get_game_version() {
-    local game_zip_file
-    local game_version
-
-    game_zip_file="$(find "$GAME_BIN_DIR" -type f -name "*.zip")"
-    game_version="$(echo "$(basename "$game_zip_file")" | cut -d "_" -f 2)"
-
-    echo "$game_version"
-}
-
-
 function get_options() {
     if [[ -z "$1" ]]; then
         usage
@@ -116,7 +105,6 @@ function get_options() {
                     echo "| |  | | |_| | |  | || (_) | |_) |"
                     echo "|_|  |_|\__,_|_|   \__\___/| .__/ "
                     echo "                           |_|    "
-                    echo "v"$(get_game_version)""
                     echo
                     echo "A fast-paced 80's arcade game where Dig Dug meets Bomberman."
                     echo
@@ -148,7 +136,7 @@ function get_options() {
 
                 rm "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
 
-               if [[ "$?" -eq 0 ]]; then
+                if [[ "$?" -eq 0 ]]; then
                     echo
                     echo "Murtop was successfully uninstalled!"
                 else

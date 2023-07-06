@@ -28,7 +28,7 @@ function install_bin_murtop() {
     fi
 
     if [[ -z "$game_zip_file" ]]; then
-        fatalError "ERROR: You must place 'murtop_[VERSION]_[ARCH].zip' in '$GAME_BIN_DIR'."
+        fatalError "ERROR: You must place 'murtop_[ARCH].zip' in '$GAME_BIN_DIR'."
     fi
 
     unzip -o "$game_zip_file" -d "$md_inst"
