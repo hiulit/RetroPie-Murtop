@@ -4,7 +4,7 @@ A script to install Murtop on Retropie.
 
 ### ⚠️ Prerequisites
 
-You have to own a copy of Murtop (you can buy it at https://hiulit.itch.io/murtop, which you'll have to place at `~/RetroPie-Murtop` after the [script installation](#install-the-script).
+You have to own a copy of Murtop (you can buy it at https://hiulit.itch.io/murtop), which you'll have to place at `~/RetroPie-Murtop` after the [script installation](#install-the-script).
 
 ## 🛠️ Setup script
 
