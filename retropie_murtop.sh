@@ -18,6 +18,7 @@ home="$(eval echo ~$user)"
 readonly RP_DIR="$home/RetroPie"
 readonly RP_PORTS_DIR="/opt/retropie/ports"
 readonly RP_CONFIGS_PORTS_DIR="/opt/retropie/configs/ports"
+readonly GAMELIST_PORTS_FILE="/opt/retropie/configs/all/emulationstation/gamelists/ports/gamelist.xml"
 
 readonly SCRIPT_VERSION="1.0.0"
 readonly SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
@@ -35,6 +36,20 @@ readonly GAME_BIN_DIR="$SCRIPT_DIR/bin"
 # Variables ##################################################################
 
 RP_SETUP_DIR="$home/RetroPie-Setup"
+
+# From https://itchio-godot-scraper.vercel.app/api/game/title/murtop
+GAME_PROPERTIES=(
+    "desc A fast-paced 80's arcade-style game where Dig Dug meets Bomberman. lala"
+    "developer hiulit"
+    "genre Action"
+    "image "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png""
+    "name Murtop"
+    "path ./$SCRIPTMODULE_NAME.sh"
+    "players 1"
+    "publisher Flynn's Arcade"
+    "rating 4.8"
+    "releasedate 20230518T000000"
+)
 
 
 # Functions ##################################################################
@@ -68,6 +83,19 @@ function usage() {
 }
 
 
+function create_gamelist_file() {
+  if [[ ! -f "$GAMELIST_PORTS_FILE" ]]; then
+    touch "$GAMELIST_PORTS_FILE"
+    cat > "$GAMELIST_PORTS_FILE" << _EOF_
+<?xml version="1.0"?>
+<gameList>
+</gameList>
+_EOF_
+  fi
+}
+
+
+
 function get_options() {
     if [[ -z "$1" ]]; then
         usage
@@ -93,6 +121,48 @@ function get_options() {
             -i|--install)
                 check_retropie_setup_dir_path "$2"
 
+                # Delete game scraping.
+                # xmlstarlet ed -L -d "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE"
+                # exit
+
+                # Check if the game already exists by checking the 'path'.
+                if xmlstarlet sel -t -v "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE" > /dev/null; then
+                    for game_property in "${GAME_PROPERTIES[@]}"; do
+                        local key
+                        local value
+
+                        key="$(echo $game_property | grep -Eo "^[^ ]+")"
+                        value="$(echo $game_property | grep -Po "(?<= ).*")"
+
+                        # If the key doesn't exist, create it.
+                        # If the keys exisits, update it.
+                        if ! xmlstarlet sel -t -v "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']/$key" "$GAMELIST_PORTS_FILE" > /dev/null; then
+                            xmlstarlet ed -L -s "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" -t elem -n "$key" -v "$value" "$GAMELIST_PORTS_FILE"
+                        else
+                            xmlstarlet ed -L -u "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']]/$key" -v "$value" "$GAMELIST_PORTS_FILE"
+                        fi
+                    done
+                else
+                    # Create a new <game> called "newGame".
+                    xmlstarlet ed -L -s "/gameList" -t elem -n "newGame" -v "" "$GAMELIST_PORTS_FILE"
+
+                    # Add subnodes to <newGame>.
+                    for game_property in "${GAME_PROPERTIES[@]}"; do
+                        local key
+                        local value
+
+                        key="$(echo $game_property | grep -Eo "^[^ ]+")"
+                        value="$(echo $game_property | grep -Po "(?<= ).*")"
+
+                        xmlstarlet ed -L -s "/gameList/newGame" -t elem -n "$key" -v "$value" "$GAMELIST_PORTS_FILE"
+                    done
+  
+                    # Rename <newGame> to <game>.
+                    xmlstarlet ed -L -r "/gameList/newGame" -v "game" "$GAMELIST_PORTS_FILE"
+                fi
+
+                exit
+
                 cat "$SCRIPT_DIR/$SCRIPTMODULE_PATH_FILE" > "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
                 chown -R "$user:$user" "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
 
@@ -100,6 +170,9 @@ function get_options() {
 
                 cp "$SCRIPT_DIR/launching.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
                 chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
+
+                cp "$SCRIPT_DIR/thumb.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
+                chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
 
                 if [[ "$?" -eq 0 ]]; then
                     echo
