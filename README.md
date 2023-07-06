@@ -41,7 +41,7 @@ Use 'sudo ./retropie_murtop.sh --help' to see all the options.
 The script assumes that you are running it on a Raspberry Pi with the `RetroPie-Setup` folder being stored in `~/RetroPie-Setup`. If your setup differs, you can pass the path where your `RetroPie-Setup` folder is stored as a parameter, like this:
 
 ```sh
-sudo ./retropie_murtop.sh.sh [OPTION] "/path/to/your/RetroPie-Setup"
+sudo ./retropie_murtop.sh.sh [install|uninstall] "/path/to/your/RetroPie-Setup"
 ```
 
 ## 📖 Options
