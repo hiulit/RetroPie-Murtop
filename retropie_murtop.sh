@@ -121,58 +121,12 @@ function get_options() {
             -i|--install)
                 check_retropie_setup_dir_path "$2"
 
-                # Delete game scraping.
-                # xmlstarlet ed -L -d "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE"
-                # exit
-
-                # Check if the game already exists by checking the 'path'.
-                if xmlstarlet sel -t -v "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE" > /dev/null; then
-                    for game_property in "${GAME_PROPERTIES[@]}"; do
-                        local key
-                        local value
-
-                        key="$(echo $game_property | grep -Eo "^[^ ]+")"
-                        value="$(echo $game_property | grep -Po "(?<= ).*")"
-
-                        # If the key doesn't exist, create it.
-                        # If the keys exisits, update it.
-                        if ! xmlstarlet sel -t -v "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']/$key" "$GAMELIST_PORTS_FILE" > /dev/null; then
-                            xmlstarlet ed -L -s "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" -t elem -n "$key" -v "$value" "$GAMELIST_PORTS_FILE"
-                        else
-                            xmlstarlet ed -L -u "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']]/$key" -v "$value" "$GAMELIST_PORTS_FILE"
-                        fi
-                    done
-                else
-                    # Create a new <game> called "newGame".
-                    xmlstarlet ed -L -s "/gameList" -t elem -n "newGame" -v "" "$GAMELIST_PORTS_FILE"
-
-                    # Add subnodes to <newGame>.
-                    for game_property in "${GAME_PROPERTIES[@]}"; do
-                        local key
-                        local value
-
-                        key="$(echo $game_property | grep -Eo "^[^ ]+")"
-                        value="$(echo $game_property | grep -Po "(?<= ).*")"
-
-                        xmlstarlet ed -L -s "/gameList/newGame" -t elem -n "$key" -v "$value" "$GAMELIST_PORTS_FILE"
-                    done
-  
-                    # Rename <newGame> to <game>.
-                    xmlstarlet ed -L -r "/gameList/newGame" -v "game" "$GAMELIST_PORTS_FILE"
-                fi
-
-                exit
-
+                # Install scriptmodule.
                 cat "$SCRIPT_DIR/$SCRIPTMODULE_PATH_FILE" > "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
                 chown -R "$user:$user" "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
 
+                # Install Murtop.
                 "$RP_SETUP_DIR/retropie_packages.sh" "$SCRIPTMODULE_NAME"
-
-                cp "$SCRIPT_DIR/launching.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
-                chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
-
-                cp "$SCRIPT_DIR/thumb.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
-                chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
 
                 if [[ "$?" -eq 0 ]]; then
                     echo
@@ -197,6 +151,55 @@ function get_options() {
                 else
                     echo
                     echo "ERROR: Couldn't install Murtop." >&2
+                    exit 1
+                fi
+
+                # Install launching image.
+                cp "$SCRIPT_DIR/launching.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
+                chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
+
+                # Install thumbnail.
+                cp "$SCRIPT_DIR/thumb.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
+                chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
+
+                create_gamelist_file
+
+                # Check if the game already exists in the game list by checking the 'path'.
+                # If so, update the game properties.
+                # If not, create a new entry.
+                if xmlstarlet sel -t -v "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE" > /dev/null; then
+                    for game_property in "${GAME_PROPERTIES[@]}"; do
+                        local key
+                        local value
+
+                        key="$(echo $game_property | grep -Eo "^[^ ]+")"
+                        value="$(echo $game_property | grep -Po "(?<= ).*")"
+
+                        # If the key doesn't exist, create it.
+                        # Otherwise, update it.
+                        if ! xmlstarlet sel -t -v "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']/$key" "$GAMELIST_PORTS_FILE" > /dev/null; then
+                            xmlstarlet ed -L -s "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" -t elem -n "$key" -v "$value" "$GAMELIST_PORTS_FILE"
+                        else
+                            xmlstarlet ed -L -u "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']/$key" -v "$value" "$GAMELIST_PORTS_FILE"
+                        fi
+                    done
+                else
+                    # Create a new <game> called "newGame".
+                    xmlstarlet ed -L -s "/gameList" -t elem -n "newGame" -v "" "$GAMELIST_PORTS_FILE"
+
+                    # Add subnodes to <newGame>.
+                    for game_property in "${GAME_PROPERTIES[@]}"; do
+                        local key
+                        local value
+
+                        key="$(echo $game_property | grep -Eo "^[^ ]+")"
+                        value="$(echo $game_property | grep -Po "(?<= ).*")"
+
+                        xmlstarlet ed -L -s "/gameList/newGame" -t elem -n "$key" -v "$value" "$GAMELIST_PORTS_FILE"
+                    done
+  
+                    # Rename <newGame> to <game>.
+                    xmlstarlet ed -L -r "/gameList/newGame" -v "game" "$GAMELIST_PORTS_FILE"
                 fi
                 ;;
 #H -u, --uninstall [path]   Uninstalls Murtop on RetroPie.
@@ -210,11 +213,10 @@ function get_options() {
                     exit 1
                 fi
 
+                # Uninstall Murtop.
                 if [[ -d "$RP_PORTS_DIR/$SCRIPTMODULE_NAME" ]]; then
                     "$RP_SETUP_DIR/retropie_packages.sh" "$SCRIPTMODULE_NAME" remove
                 fi
-
-                rm "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
 
                 if [[ "$?" -eq 0 ]]; then
                     echo
@@ -222,7 +224,20 @@ function get_options() {
                 else
                     echo
                     echo "ERROR: Couldn't uninstall Murtop." >&2
+                    exit 1
                 fi
+
+                # Uninstall scriptmodule.
+                rm "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
+
+                # Remove launching image.
+                rm "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
+
+                # Remove thumbnail.
+                rm "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
+
+                # Delete game entry from the game list.
+                xmlstarlet ed -L -d "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE"
                 ;;
 #H -v, --version            Prints the script version.
             -v|--version)
