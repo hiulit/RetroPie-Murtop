@@ -74,6 +74,7 @@ See [CHANGELOG](/CHANGELOG.md).
 **hiulit**
 
 - Twitter: [@hiulit](https://twitter.com/hiulit)
+- Bluesky: [@hiulit](https://bsky.app/profile/hiulit.bsky.social)
 - GitHub: [@hiulit](https://github.com/hiulit)
 
 ## 🤝 Contributing
