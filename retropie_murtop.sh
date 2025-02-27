@@ -21,7 +21,7 @@ readonly RP_CONFIGS_PORTS_DIR="/opt/retropie/configs/ports"
 readonly GAMELIST_PORTS_DIR="/opt/retropie/configs/all/emulationstation/gamelists/ports"
 readonly GAMELIST_PORTS_FILE="$GAMELIST_PORTS_DIR/gamelist.xml"
 
-readonly SCRIPT_VERSION="1.0.0"
+readonly SCRIPT_VERSION="1.1.0"
 readonly SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
 readonly SCRIPT_NAME="$(basename "$0")"
 readonly SCRIPT_FULL="$SCRIPT_DIR/$SCRIPT_NAME"
