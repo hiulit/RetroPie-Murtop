@@ -164,6 +164,9 @@ function get_options() {
                 cp "$SCRIPT_DIR/thumb.png" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
                 chown -R "$user:$user" "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
 
+                # Install "override.cfg".
+                cp "$SCRIPT_DIR/override.cfg" "$RP_PORTS_DIR/$SCRIPTMODULE_NAME/override.cfg"
+
                 create_gamelist_file
 
                 # Check if the game already exists in the game list by checking the 'path'.
