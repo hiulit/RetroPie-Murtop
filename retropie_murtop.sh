@@ -235,11 +235,8 @@ function get_options() {
                 # Uninstall scriptmodule.
                 rm "$RP_SETUP_DIR/$SCRIPTMODULE_PATH_FILE"
 
-                # Remove launching image.
-                rm "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/launching.png"
-
-                # Remove thumbnail.
-                rm "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
+                # Remove game's config dir (which includes files such as "launching.png" and "thumb.jpg", among others).
+                rm -rf "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME"
 
                 # Delete game entry from the game list.
                 if [[ -f "$GAMELIST_PORTS_FILE" ]]; then
