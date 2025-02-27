@@ -18,7 +18,8 @@ home="$(eval echo ~$user)"
 readonly RP_DIR="$home/RetroPie"
 readonly RP_PORTS_DIR="/opt/retropie/ports"
 readonly RP_CONFIGS_PORTS_DIR="/opt/retropie/configs/ports"
-readonly GAMELIST_PORTS_FILE="/opt/retropie/configs/all/emulationstation/gamelists/ports/gamelist.xml"
+readonly GAMELIST_PORTS_DIR="/opt/retropie/configs/all/emulationstation/gamelists/ports"
+readonly GAMELIST_PORTS_FILE="$GAMELIST_PORTS_DIR/gamelist.xml"
 
 readonly SCRIPT_VERSION="1.0.0"
 readonly SCRIPT_DIR="$(cd "$(dirname $0)" && pwd)"
@@ -85,6 +86,7 @@ function usage() {
 
 function create_gamelist_file() {
   if [[ ! -f "$GAMELIST_PORTS_FILE" ]]; then
+    mkdir -p "$GAMELIST_PORTS_DIR"
     touch "$GAMELIST_PORTS_FILE"
     cat > "$GAMELIST_PORTS_FILE" << _EOF_
 <?xml version="1.0"?>
