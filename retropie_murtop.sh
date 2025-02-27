@@ -242,7 +242,9 @@ function get_options() {
                 rm "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png"
 
                 # Delete game entry from the game list.
-                xmlstarlet ed -L -d "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE"
+                if [[ -f "$GAMELIST_PORTS_FILE" ]]; then
+                    xmlstarlet ed -L -d "/gameList/game[path='./$SCRIPTMODULE_NAME.sh']" "$GAMELIST_PORTS_FILE"
+                fi
                 ;;
 #H -v, --version            Prints the script version.
             -v|--version)
