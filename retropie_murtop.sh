@@ -40,14 +40,14 @@ RP_SETUP_DIR="$home/RetroPie-Setup"
 
 # From https://itchio-godot-scraper.vercel.app/api/game/title/murtop
 GAME_PROPERTIES=(
-    "desc A fast-paced 80's arcade-style game where Dig Dug meets Bomberman. lala"
+    "desc A fast-paced 80's arcade-style game where Dig Dug meets Bomberman."
     "developer hiulit"
     "genre Action"
     "image "$RP_CONFIGS_PORTS_DIR/$SCRIPTMODULE_NAME/thumb.png""
     "name Murtop"
     "path ./$SCRIPTMODULE_NAME.sh"
     "players 1"
-    "publisher Flynn's Arcade"
+    "publisher hiulit's game studio"
     "rating 4.8"
     "releasedate 20230518T000000"
 )
