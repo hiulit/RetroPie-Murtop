@@ -207,7 +207,7 @@ function get_options() {
                     xmlstarlet ed -L -r "/gameList/newGame" -v "game" "$GAMELIST_PORTS_FILE"
                 fi
                 ;;
-#H -u, --uninstall [path]   Uninstalls Murtop on RetroPie.
+#H -u, --uninstall [path]   Uninstalls Murtop from RetroPie.
 #H                              Path: The location of the "RetroPie-Setup" folder.
 #H                              Default: "~/RetroPie-Setup".
             -u|--uninstall)

@@ -10,11 +10,11 @@ A script to install Murtop on Retropie.
 
 ## ⚠️ Prerequisites
 
-You have to own a copy of Murtop, which you can buy it on [itch.io](https://hiulit.itch.io/murtop).
+You have to own a copy of Murtop, which you can buy on [itch.io](https://hiulit.itch.io/murtop).
 
 [![Purchase Murtop on itch.io](images/itchio_widget.jpg)](https://hiulit.itch.io/murtop/purchase)
 
-When you download Murtop from [itch.io](https://hiulit.itch.io/murtop), you get a zip file (`murtop_[ARCH].zip`). You'll have to place it at `~/RetroPie-Murtop/bin` after the [script installation](#install-the-script).
+When you download Murtop from [itch.io](https://hiulit.itch.io/murtop), you get a zip file (`murtop_[ARCH].zip`). You'll have to place it in `~/RetroPie-Murtop/bin` after completing the [script installation](#install-the-script).
 
 ## 🛠️ Setup script
 
@@ -48,7 +48,7 @@ USAGE: sudo ./retropie_murtop.sh [OPTIONS]
 Use 'sudo ./retropie_murtop.sh --help' to see all the options.
 ```
 
-The script assumes that you are running it on a Raspberry Pi with the `RetroPie-Setup` folder being stored in `~/RetroPie-Setup`. If your setup differs, you can pass the path where your `RetroPie-Setup` folder is stored as a parameter, like this:
+The script assumes that you are running it on a Raspberry Pi with the `RetroPie-Setup` folder located at `~/RetroPie-Setup`. If your setup differs, you can pass the path where your `RetroPie-Setup` folder is located as a parameter, like this:
 
 ```sh
 sudo ./retropie_murtop.sh [install|uninstall] "/path/to/your/RetroPie-Setup"
@@ -60,7 +60,7 @@ sudo ./retropie_murtop.sh [install|uninstall] "/path/to/your/RetroPie-Setup"
 - `--install [path]`: Installs Murtop on RetroPie.
   - Path: The location of the `RetroPie-Setup` folder.
   - Default: `~/RetroPie-Setup`.
-- `--uninstall [path]`: Uninstalls Murtop on RetroPie.
+- `--uninstall [path]`: Uninstalls Murtop from RetroPie.
   - Path: The location of the `RetroPie-Setup` folder.
   - Default: `~/RetroPie-Setup`.
 - `--version`: Prints the script version.
